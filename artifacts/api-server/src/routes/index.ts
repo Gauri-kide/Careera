@@ -11,6 +11,10 @@ import announcementsRouter from "./announcements.js";
 
 const router: IRouter = Router();
 
+router.get("/", (_req, res) => {
+  res.json({ message: "Careera API Base Endpoint", health: "/api/healthz" });
+});
+
 router.use(healthRouter);
 router.use("/auth", authRouter);
 router.use("/events", eventsRouter);
