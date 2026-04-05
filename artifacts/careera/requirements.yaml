@@ -1,0 +1,18 @@
+packages:
+  "framer-motion": "For page transitions and fluid micro-interactions"
+  "date-fns": "For elegant date and time formatting across the dashboards"
+  "recharts": "For rendering beautiful admin dashboard statistics"
+  "clsx": "For conditional class name merging"
+  "tailwind-merge": "For resolving tailwind class conflicts"
+
+images:
+  - path: "artifacts/careera/public/images/hero-bg.png"
+    description: "Abstract modern geometric background in navy blue and bright cyan, clean SaaS style, subtle gradients and glowing lights"
+    aspect_ratio: "16:9"
+  - path: "artifacts/careera/public/images/auth-bg.png"
+    description: "Minimalist elegant pattern with deep blue and cyan accents, soft lighting, professional and corporate"
+    aspect_ratio: "16:9"
+
+notes:
+  - Using generated React Query hooks from @workspace/api-client-react
+  - Auth relies on the API providing httpOnly cookies, so we don't store JWTs manually

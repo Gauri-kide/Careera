@@ -1,0 +1,88 @@
+Implement a flexible email verification and college validation system for a platform called "Careera".
+
+Tech Stack:
+- Frontend: HTML, CSS, JavaScript
+- Backend: Node.js + Express
+- Database: MongoDB
+
+Requirements:
+
+1. Signup:
+- User enters:
+  - Name
+  - Email
+  - Password
+  - Role (Student / Organizer / Admin)
+
+2. Email Validation:
+- Validate email format using regex
+- Allow all valid emails (do NOT restrict to .edu only)
+
+3. Domain Extraction:
+- Extract domain from email
+  Example:
+  - user@ycce.in → domain = ycce.in
+  - user@gmail.com → domain = gmail.com
+
+4. College Domain Database:
+- Maintain a collection:
+  "colleges" with fields:
+  - collegeName
+  - allowedDomains (array)
+
+Example:
+{
+  collegeName: "YCCE Nagpur",
+  allowedDomains: ["ycce.in"]
+}
+
+5. Smart Verification Logic:
+
+IF email domain matches a known college domain:
+  → mark user as "college_verified = true"
+
+ELSE:
+  → mark as "college_verified = false"
+  → allow signup but mark as "unverified"
+
+6. Organizer Special Flow:
+
+IF role = Organizer:
+  - Allow signup with any email
+  - BUT require additional verification:
+    - Enter college name
+    - Upload proof (ID card / club proof)
+    - Submit request for approval
+
+7. Admin Verification:
+
+- Admin dashboard should show:
+  - Organizer requests
+  - Their email domain
+  - Uploaded proof
+
+- Admin can:
+  - Approve → mark as verified organizer
+  - Reject → block access
+
+8. Email Verification (Mandatory for all):
+- Send verification link via email
+- Only allow login after email is verified
+
+9. UI Feedback:
+- If email domain matches college:
+  → Show: "College verified ✅"
+- If not:
+  → Show: "Personal email detected – additional verification required"
+
+10. Security:
+- Use JWT or token-based email verification
+- Expire token in 10–15 minutes
+
+Goal:
+Build a flexible system that supports real college domains like:
+- ycce.in
+- iitb.ac.in
+- vit.ac.in
+
+WITHOUT restricting users to only ".edu" emails.

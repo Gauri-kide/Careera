@@ -1,0 +1,138 @@
+Update the existing full-stack project "Careera" (Node.js + Express + MongoDB + HTML/CSS/JS) by ADDING the following features. Do NOT remove any existing functionality.
+
+Maintain the existing Navy Blue (#1e3a8a) and Cyan (#06b6d4) color scheme and modern SaaS UI.
+
+----------------------------------
+1. BROADCAST ANNOUNCEMENT SYSTEM
+----------------------------------
+
+Backend:
+- Create Announcement model:
+  - title
+  - message
+  - targetRole (USER / ORGANIZER / ALL)
+  - createdAt
+
+- Create APIs:
+  - POST /announcements → create announcement (Admin only)
+  - GET /announcements → fetch all announcements
+  - DELETE /announcements/:id → delete announcement
+
+Frontend:
+- Admin Dashboard:
+  - Form to create announcement
+  - List of all announcements (history)
+  - Delete button for each announcement
+
+- User & Organizer Dashboard:
+  - Show latest announcements
+  - Notification section
+
+----------------------------------
+2. ORGANIZER DELETE FUNCTIONALITY
+----------------------------------
+
+Backend:
+- Allow organizers to:
+  - DELETE their own events
+  - (Optional) remove registered users from their event
+
+- Add API:
+  - DELETE /events/:id (only event owner organizer)
+
+Frontend:
+- Organizer Dashboard:
+  - Show "Delete Event" button
+  - Confirmation popup before deletion
+
+----------------------------------
+3. ADD & EDIT EVENT + TAG SYSTEM
+----------------------------------
+
+Backend:
+- Update Event model:
+  - title
+  - description
+  - date
+  - venue
+  - eligibility
+  - fees
+  - deadline
+  - tags (array of strings)
+
+- APIs:
+  - POST /events → create event
+  - PUT /events/:id → edit event
+
+Frontend:
+- Organizer Dashboard:
+  - Add Event form
+  - Edit Event form
+  - Input field for tags (comma-separated or manual typing)
+  - Display tags on event cards
+
+----------------------------------
+4. REGISTRATION DETAILS VIEW
+----------------------------------
+
+Backend:
+- Create Registration model:
+  - userId
+  - eventId
+  - status
+  - createdAt
+
+- APIs:
+  - GET /registrations/user → events registered by user
+  - GET /registrations/event/:id → users registered for event (organizer view)
+
+Frontend:
+- User Dashboard:
+  - Show registered events (past + upcoming)
+
+- Organizer Dashboard:
+  - View list of users registered for each event
+
+----------------------------------
+5. EMAIL VERIFICATION SYSTEM
+----------------------------------
+
+Backend:
+- During signup (User & Organizer):
+  - Generate OTP or token
+  - Send email using Nodemailer
+
+- Add fields in User model:
+  - emailVerified (boolean)
+  - verificationToken or OTP
+
+- APIs:
+  - POST /auth/send-verification
+  - POST /auth/verify-email
+
+- Restriction:
+  - Only verified users can login
+
+Frontend:
+- Signup Page:
+  - After signup → show "Verify Email" screen
+  - Input for OTP / verification link
+
+----------------------------------
+GENERAL REQUIREMENTS
+----------------------------------
+
+- Use JWT for authentication
+- Protect routes based on roles (User, Organizer, Admin)
+- Keep code modular (routes, controllers, models)
+- Add proper error handling
+- Use clean UI with cards, tables, and forms
+
+----------------------------------
+OUTPUT
+----------------------------------
+
+- Provide updated backend and frontend code
+- Maintain existing project structure
+- Ensure all new features are fully working
+- Include instructions to run the project

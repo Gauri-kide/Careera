@@ -1,0 +1,1119 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: Careera API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication
+  - name: users
+    description: User operations
+  - name: events
+    description: Event operations
+  - name: organizers
+    description: Organizer operations
+  - name: admin
+    description: Admin operations
+  - name: notifications
+    description: Notification operations
+  - name: registrations
+    description: Event registrations
+  - name: referrals
+    description: Referral system
+  - name: announcements
+    description: Announcements
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/signup:
+    post:
+      operationId: signup
+      tags: [auth]
+      summary: User signup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupRequest"
+      responses:
+        "201":
+          description: Signup successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/organizer-signup:
+    post:
+      operationId: organizerSignup
+      tags: [auth]
+      summary: Organizer signup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrganizerSignupRequest"
+      responses:
+        "201":
+          description: Organizer signup successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentUser"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /users/profile:
+    get:
+      operationId: getUserProfile
+      tags: [users]
+      summary: Get user profile
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+    put:
+      operationId: updateUserProfile
+      tags: [users]
+      summary: Update user profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileRequest"
+      responses:
+        "200":
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+
+  /users/registrations:
+    get:
+      operationId: getUserRegistrations
+      tags: [users]
+      summary: Get user's registered events
+      responses:
+        "200":
+          description: User registrations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Registration"
+
+  /events:
+    get:
+      operationId: getEvents
+      tags: [events]
+      summary: Get all events
+      parameters:
+        - name: filter
+          in: query
+          schema:
+            type: string
+            enum: [all, upcoming, past, recommended]
+      responses:
+        "200":
+          description: List of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+    post:
+      operationId: createEvent
+      tags: [events]
+      summary: Create event (organizer only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEventRequest"
+      responses:
+        "201":
+          description: Event created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+
+  /events/public:
+    get:
+      operationId: getPublicEvents
+      tags: [events]
+      summary: Get public events for landing page (no login required)
+      responses:
+        "200":
+          description: List of public events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+
+  /events/{id}:
+    get:
+      operationId: getEvent
+      tags: [events]
+      summary: Get event by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Event details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateEvent
+      tags: [events]
+      summary: Update event (organizer only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEventRequest"
+      responses:
+        "200":
+          description: Event updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+    delete:
+      operationId: deleteEvent
+      tags: [events]
+      summary: Delete event (organizer only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Event deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /events/{id}/registrations:
+    get:
+      operationId: getEventRegistrations
+      tags: [registrations]
+      summary: Get registrations for an event (organizer only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Event registrations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EventRegistrant"
+
+  /events/{id}/register:
+    post:
+      operationId: registerForEvent
+      tags: [registrations]
+      summary: Register for an event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "201":
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Registration"
+        "400":
+          description: Already registered or registration closed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /organizers/events:
+    get:
+      operationId: getOrganizerEvents
+      tags: [organizers]
+      summary: Get organizer's events
+      responses:
+        "200":
+          description: Organizer events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+
+  /organizers/announcements:
+    post:
+      operationId: createAnnouncement
+      tags: [announcements]
+      summary: Create announcement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAnnouncementRequest"
+      responses:
+        "201":
+          description: Announcement created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Announcement"
+
+  /organizers/announcements/{id}:
+    put:
+      operationId: updateAnnouncement
+      tags: [announcements]
+      summary: Update announcement (organizer only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAnnouncementRequest"
+      responses:
+        "200":
+          description: Announcement updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Announcement"
+    delete:
+      operationId: deleteAnnouncement
+      tags: [announcements]
+      summary: Delete announcement (organizer only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Announcement deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+
+  /admin/users:
+    get:
+      operationId: adminGetUsers
+      tags: [admin]
+      summary: Get all users
+      responses:
+        "200":
+          description: All users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AdminUser"
+
+  /admin/organizers:
+    get:
+      operationId: adminGetOrganizers
+      tags: [admin]
+      summary: Get all organizers
+      responses:
+        "200":
+          description: All organizers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AdminOrganizer"
+
+  /admin/organizers/{id}/approve:
+    post:
+      operationId: approveOrganizer
+      tags: [admin]
+      summary: Approve organizer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Organizer approved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /admin/organizers/{id}/reject:
+    post:
+      operationId: rejectOrganizer
+      tags: [admin]
+      summary: Reject organizer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Organizer rejected
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /admin/events:
+    get:
+      operationId: adminGetEvents
+      tags: [admin]
+      summary: Get all events (admin)
+      responses:
+        "200":
+          description: All events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+
+  /announcements:
+    get:
+      operationId: getAnnouncements
+      tags: [announcements]
+      summary: Get all announcements
+      responses:
+        "200":
+          description: Announcements list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Announcement"
+
+  /admin/announcements:
+    get:
+      operationId: adminGetAnnouncements
+      tags: [admin]
+      summary: Get all announcements (admin)
+      responses:
+        "200":
+          description: All announcements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Announcement"
+    post:
+      operationId: adminCreateAnnouncement
+      tags: [admin]
+      summary: Create platform-wide announcement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAnnouncementRequest"
+      responses:
+        "201":
+          description: Announcement created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Announcement"
+
+  /admin/announcements/{id}:
+    delete:
+      operationId: adminDeleteAnnouncement
+      tags: [admin]
+      summary: Delete an announcement
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Announcement deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /admin/stats:
+    get:
+      operationId: adminGetStats
+      tags: [admin]
+      summary: Get platform stats
+      responses:
+        "200":
+          description: Platform statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminStats"
+
+  /notifications:
+    get:
+      operationId: getNotifications
+      tags: [notifications]
+      summary: Get user notifications
+      responses:
+        "200":
+          description: Notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+
+  /notifications/{id}/read:
+    post:
+      operationId: markNotificationRead
+      tags: [notifications]
+      summary: Mark notification as read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Marked as read
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /referrals:
+    get:
+      operationId: getReferrals
+      tags: [referrals]
+      summary: Get user's referrals
+      responses:
+        "200":
+          description: Referral info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReferralInfo"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    SignupRequest:
+      type: object
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        collegeName:
+          type: string
+        interests:
+          type: array
+          items:
+            type: string
+        pastExperience:
+          type: string
+        referralCode:
+          type: string
+      required:
+        - fullName
+        - email
+        - password
+        - collegeName
+        - interests
+
+    OrganizerSignupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        organizationName:
+          type: string
+        collegeName:
+          type: string
+        location:
+          type: string
+        role:
+          type: string
+          enum: [President, Member, Coordinator]
+      required:
+        - name
+        - email
+        - password
+        - organizationName
+        - collegeName
+        - location
+
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/CurrentUser"
+        message:
+          type: string
+      required:
+        - user
+        - message
+
+    CurrentUser:
+      type: object
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum: [user, organizer, admin]
+        collegeName:
+          type: string
+        interests:
+          type: array
+          items:
+            type: string
+        isApproved:
+          type: boolean
+        referralCode:
+          type: string
+      required:
+        - id
+        - fullName
+        - email
+        - role
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+        email:
+          type: string
+        collegeName:
+          type: string
+        interests:
+          type: array
+          items:
+            type: string
+        pastExperience:
+          type: string
+        referralCode:
+          type: string
+        referralCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - fullName
+        - email
+
+    UpdateProfileRequest:
+      type: object
+      properties:
+        fullName:
+          type: string
+        collegeName:
+          type: string
+        interests:
+          type: array
+          items:
+            type: string
+        pastExperience:
+          type: string
+
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        organizerName:
+          type: string
+        organizationName:
+          type: string
+        collegeName:
+          type: string
+        location:
+          type: string
+        fees:
+          type: number
+        registrationStartDate:
+          type: string
+          format: date-time
+        registrationDeadline:
+          type: string
+          format: date-time
+        eventDate:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum: [upcoming, deadline_soon, closed, cancelled]
+        isRegistered:
+          type: boolean
+        registrationCount:
+          type: integer
+        organizerId:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - description
+        - organizerName
+        - collegeName
+        - location
+        - registrationDeadline
+        - eventDate
+        - status
+
+    CreateEventRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        collegeName:
+          type: string
+        location:
+          type: string
+        fees:
+          type: number
+        registrationStartDate:
+          type: string
+          format: date-time
+        registrationDeadline:
+          type: string
+          format: date-time
+        eventDate:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - description
+        - collegeName
+        - location
+        - registrationDeadline
+        - eventDate
+
+    Registration:
+      type: object
+      properties:
+        id:
+          type: integer
+        eventId:
+          type: integer
+        userId:
+          type: integer
+        event:
+          $ref: "#/components/schemas/Event"
+        registeredAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - eventId
+        - userId
+        - registeredAt
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        message:
+          type: string
+        type:
+          type: string
+          enum: [reminder, cancellation, postponement, announcement, general]
+        isRead:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - message
+        - type
+        - isRead
+        - createdAt
+
+    EventRegistrant:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        fullName:
+          type: string
+        email:
+          type: string
+        collegeName:
+          type: string
+        registeredAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - fullName
+        - email
+        - registeredAt
+
+    Announcement:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        message:
+          type: string
+        targetRole:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - message
+        - createdAt
+
+    CreateAnnouncementRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        message:
+          type: string
+        targetRole:
+          type: string
+          enum: [all, user, organizer]
+      required:
+        - title
+        - message
+
+    AdminUser:
+      type: object
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+        email:
+          type: string
+        collegeName:
+          type: string
+        interests:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        lastLogin:
+          type: string
+          format: date-time
+      required:
+        - id
+        - fullName
+        - email
+        - createdAt
+
+    AdminOrganizer:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        organizationName:
+          type: string
+        collegeName:
+          type: string
+        location:
+          type: string
+        role:
+          type: string
+        isApproved:
+          type: boolean
+        isRejected:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - email
+        - organizationName
+        - collegeName
+        - isApproved
+        - isRejected
+        - createdAt
+
+    AdminStats:
+      type: object
+      properties:
+        totalUsers:
+          type: integer
+        totalOrganizers:
+          type: integer
+        pendingOrganizers:
+          type: integer
+        totalEvents:
+          type: integer
+        activeEvents:
+          type: integer
+        totalRegistrations:
+          type: integer
+      required:
+        - totalUsers
+        - totalOrganizers
+        - pendingOrganizers
+        - totalEvents
+        - activeEvents
+        - totalRegistrations
+
+    ReferralInfo:
+      type: object
+      properties:
+        referralCode:
+          type: string
+        referralCount:
+          type: integer
+        referrals:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              fullName:
+                type: string
+              joinedAt:
+                type: string
+                format: date-time
+            required:
+              - id
+              - fullName
+              - joinedAt
+      required:
+        - referralCode
+        - referralCount
+        - referrals

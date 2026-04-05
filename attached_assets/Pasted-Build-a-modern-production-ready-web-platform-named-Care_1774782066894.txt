@@ -1,0 +1,296 @@
+Build a modern, production-ready web platform named **“Careera”** — an AI-powered event recommendation system designed for students, organizers, and administrators.
+
+The platform should feel like a professional SaaS product (similar to LinkedIn + event platforms), not a generic template. Focus on clean UX, structured layouts, and smooth interactions using Tailwind CSS.
+
+---
+
+### 🎯 CORE CONCEPT
+
+Careera connects students with relevant events (hackathons, workshops, competitions) using intelligent recommendations based on their interests and past participation.
+
+There are **3 roles** in the system:
+
+1. User (Student)
+2. Organizer
+3. Admin (restricted access)
+
+---
+
+## 👤 USER MODULE
+
+### 🔐 Authentication & Onboarding
+
+* Signup fields:
+
+  * Full Name
+  * College Name
+  * Interests (multi-select)
+  * Past Experience (events/hackathons participated)
+* Login system with session handling
+
+---
+
+### 🧠 AI-Based Recommendations
+
+* Show personalized event recommendations based on:
+
+  * Interests
+  * Past participation
+* Section title: **“Recommended For You”**
+
+---
+
+### 📊 Dashboard Layout (Important)
+
+Create a **tab-based UI with clear separation**:
+
+#### Tabs:
+
+1. **Recommended Events**
+2. **All Events**
+3. **Upcoming Events**
+4. **Past Events (Expired)**
+5. **Notifications**
+6. **Profile**
+
+---
+
+### 📅 Event Cards UI
+
+Each event should be displayed in **clean card layout**:
+
+* Event Name
+* Organizer Name
+* College
+* Date
+* Location
+* Tag (Upcoming / Deadline Soon / Closed)
+
+---
+
+### 📄 Event Details Page
+
+When user clicks an event:
+
+* Full details:
+
+  * Event Name
+  * Description
+  * Organizer details
+  * College name
+  * Location
+  * Registration Fee
+  * Registration Start Date
+  * Registration Deadline
+  * Event Date
+* CTA Button: **Register Now**
+
+---
+
+### 🔔 Notifications System
+
+* Show real-time updates:
+
+  * Deadline reminders
+  * Event cancellations
+  * Postponements
+  * Organizer/Admin announcements
+
+---
+
+### 👤 Profile Section
+
+* Edit profile
+* Update interests
+* View past registered events
+
+---
+
+### 🎁 Referral System
+
+* Users can invite others
+* Track referrals
+* Add rule:
+
+  * If referred user violates platform rules → penalty applied to referrer
+
+---
+
+## 🧑‍💼 ORGANIZER MODULE
+
+### 🔐 Organizer Signup
+
+* Name
+* Club/Organization Name
+* College Name
+* Location
+
+---
+
+### 🛑 Approval System (IMPORTANT)
+
+Organizer cannot access dashboard until approved by Admin.
+
+---
+
+### 📊 Organizer Dashboard
+
+#### Tabs:
+
+1. **Manage Events**
+
+   * Add Event
+   * Edit Event
+   * Delete Event
+
+2. **Announcements**
+
+   * Create announcement
+   * Push to all users (appears in notification tab)
+
+---
+
+### ➕ Add Event Form
+
+* Event Name
+* Description
+* College Name
+* Location
+* Fees
+* Registration Dates
+* Event Date
+
+---
+
+## 🛡️ ADMIN MODULE (STRICT ACCESS)
+
+### 🔐 Admin Access
+
+* Pre-created admin:
+
+  * Email: [gaurik8149@gmail.com](mailto:gaurik8149@gmail.com)
+  * Password: Admin
+
+---
+
+### 📊 Admin Dashboard
+
+#### Features:
+
+* View all:
+
+  * Users
+  * Organizers
+  * Events
+
+* Track:
+
+  * User login/logout activity
+  * Event submissions
+
+---
+
+### ✅ Approval System (CORE FEATURE)
+
+#### Organizer Approval Flow:
+
+After signup + email verification:
+
+Organizer submits:
+
+* Club Name
+* College Name
+* Role (President / Member)
+* Optional Proof:
+
+  * ID Card
+  * Event Certificate
+  * Club Poster
+
+👉 Admin can:
+
+* Approve
+* Reject
+
+---
+
+### 📢 Admin Announcements
+
+* Send platform-wide notifications to all users
+
+---
+
+## 🎨 UI/UX DESIGN SYSTEM
+
+Use a **professional SaaS color scheme**:
+
+```css
+:root {
+  --primary: #1e3a8a;     /* Navy Blue */
+  --secondary: #06b6d4;   /* Cyan */
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #1f2937;
+  --muted: #64748b;
+}
+```
+
+---
+
+### 🖌️ Design Guidelines
+
+* Use **Tailwind CSS**
+* Clean spacing and grid layout
+* Rounded cards (`rounded-2xl`)
+* Soft shadows (`shadow-md`)
+* Smooth hover effects
+* Micro-interactions (scale, fade, slide)
+
+---
+
+### ✨ Animations (IMPORTANT)
+
+* Tab switching → smooth fade/slide
+* Card hover → slight scale-up
+* Button click → ripple or subtle bounce
+* Page transitions → fade-in
+
+---
+
+### 📱 Responsiveness
+
+* Fully responsive:
+
+  * Mobile
+  * Tablet
+  * Desktop
+
+---
+
+## ⚙️ TECH REQUIREMENTS
+
+* Frontend: React + Tailwind CSS
+* Backend: Node.js / Express (or Firebase)
+* Database: MongoDB / PostgreSQL
+* Authentication: JWT / Firebase Auth
+
+---
+
+## 🚫 IMPORTANT NOTES
+
+* Do NOT make it look like a generic AI-generated template
+* Avoid overly flashy UI — keep it clean and professional
+* Focus on usability and clarity
+* Maintain consistent spacing and typography
+* Use meaningful icons and labels
+
+---
+
+## 🎯 END GOAL
+
+A polished, scalable platform that can later be converted into a mobile app, with a strong foundation in:
+
+* Role-based access
+* AI recommendations
+* Real-time notifications
+* Admin-controlled ecosystem
