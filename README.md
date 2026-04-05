@@ -1,4 +1,4 @@
-# Workspace
+# Careera Platform
 
 ## Overview
 
@@ -53,7 +53,7 @@ AI-powered event recommendation platform for students, organizers, and admins.
 ## Structure
 
 ```text
-artifacts-monorepo/
+careera-platform/
 ├── artifacts/
 │   ├── api-server/         # Express API server
 │   └── careera/            # React + Vite frontend

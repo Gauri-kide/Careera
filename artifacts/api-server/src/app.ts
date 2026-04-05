@@ -50,4 +50,8 @@ app.use(session({
 
 app.use("/api", router);
 
+app.get("/", (_req, res) => {
+  res.send("<h1>Careera API is running</h1><p>Visit <a href='/api/healthz'>/api/healthz</a> for full status.</p>");
+});
+
 export default app;
