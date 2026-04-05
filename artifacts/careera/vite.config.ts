@@ -36,7 +36,7 @@ export default defineConfig({
     },
     proxy: {
       "/api": {
-        target: "https://careera-api-a3hw.onrender.com",
+        target: "http://localhost:3000",
         changeOrigin: true,
       },
     },

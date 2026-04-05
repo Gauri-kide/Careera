@@ -1,3 +1,7 @@
+import path from "node:path";
+import { config } from "dotenv";
+// Load .env from the root directory
+config({ path: path.resolve(import.meta.dirname, "../../../.env") });
 import app from "./app";
 import { logger } from "./lib/logger";
 

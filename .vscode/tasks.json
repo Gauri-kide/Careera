@@ -1,0 +1,59 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Backend",
+      "type": "shell",
+      "command": "pnpm --filter @workspace/api-server run start",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Server listening",
+          "endsPattern": "Server listening"
+        }
+      },
+      "presentation": {
+        "group": "servers",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Start Frontend",
+      "type": "shell",
+      "command": "pnpm --filter @workspace/careera run dev",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Local:",
+          "endsPattern": "Local:"
+        }
+      },
+      "presentation": {
+        "group": "servers",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Launch Full Stack",
+      "dependsOn": ["Start Backend", "Start Frontend"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}

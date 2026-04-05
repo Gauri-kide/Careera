@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Full Stack (Backend + Frontend)",
+      "request": "launch",
+      "type": "node",
+      "preLaunchTask": "Launch Full Stack",
+      "serverReadyAction": {
+        "pattern": "Local:   (http://localhost:5173/)",
+        "action": "openExternally"
+      }
+    }
+  ]
+}
